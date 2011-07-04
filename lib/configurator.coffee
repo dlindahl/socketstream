@@ -9,9 +9,6 @@ exports.configure = ->
   setDefaults()
   setEnvironmentDefaults()
   mergeConfigFiles()
-  # mergeConfigFile("/config/app.json")
-  # mergeConfigFile("/config/environments/#{SS.env}.json")
-
 
 # Set sensible defaults so we can be up and running without an app-specific config file
 setDefaults = ->
@@ -121,31 +118,24 @@ mergeConfigFiles = ->
 
 mergeConfigFile = (name) ->
   mergeJsonFile(name) if name.match(/.json/)?
-  mergeFile(name) if name.match(/.js$/)? or name.match(/.coffee$/)
+  merge(require("#{SS.root}#{name}")) if name.match(/.js$/)? or name.match(/.coffee$/)
 
 merge = (new_config) ->
-  SS.config.extend(new_config)
+  try 
+    SS.config.extend(new_config)
+  catch e
+    SS.log.error.exception(e)
+    throw new Error("App config file #{name} loaded and parsed as JSON but unable to merge. Check syntax carefully and ensure config values exist.")
 
 mergeJsonFile = (name) ->
   try
     config_file_body = fs.readFileSync(SS.root + name, 'utf-8')
     try
       app_config = JSON.parse(config_file_body)
-      try
-        merge(app_config)
-      catch e
-        throw new Error("App config file #{name} loaded and parsed as JSON but unable to merge. Check syntax carefully and ensure config values exist.")
+      merge(app_config)
     catch e
       throw new Error("Loaded, but unable to parse app config file #{name}. Ensure it is in valid JSON format with double quotes (not single!) around all strings.")
   catch e
-    unless e.code == 'EBADF' # Do no warn if config file is not present - that's ok
+    unless e.code == 'EBADF' # Do not warn if config file is not present - that's ok
       SS.log.error.exception(e)
       throw new Error('App config error')
-
-mergeFile = (name) ->
-  try 
-    merge(require("#{SS.root}#{name}"))
-  catch e
-    SS.log.error.exception(e)
-    throw new Error('App config error')
-  

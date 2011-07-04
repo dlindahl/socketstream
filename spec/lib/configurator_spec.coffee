@@ -99,8 +99,4 @@ describe "Configurator", ->
         fs.rmdirSync 'lab/config/environments', mode
       
       it "should raise an error if a config file contains invalid markup", ->
-        #fs.unlinkSync 'lab/config/app.coffee', mode
-        #fs.writeFileSync 'lab/config/app.coffee', 'module.exports =\n\tclient:\n\t\tlog:\n\t\t\tlevel: 3'
-        configurator.configure()
-        expect(SS.config.client.log.level).toEqual 2
-        
+        # TODO - figure out a way to test the raising of an error
