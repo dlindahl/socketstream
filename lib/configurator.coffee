@@ -110,9 +110,6 @@ setEnvironmentDefaults = ->
 # It will also search for an environment-specific file, and merge if it exists,
 # but it will not raise an error if it does not, as it is optional
 mergeConfigFiles = ->
-
-  # try and see what files exist by scanning for them
-  
   config_dir_files = fs.readdirSync "#{SS.root}/config/" 
   for file in config_dir_files
     path = "/config"
@@ -146,4 +143,9 @@ mergeJsonFile = (name) ->
       throw new Error('App config error')
 
 mergeFile = (name) ->
-  merge(require("#{SS.root}#{name}"))
+  try 
+    merge(require("#{SS.root}#{name}"))
+  catch e
+    SS.log.error.exception(e)
+    throw new Error('App config error')
+  
