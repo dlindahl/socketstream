@@ -680,11 +680,10 @@ Yes, we know. At the moment there are very few tests. This is bad. We are curren
 
 --- Update ---
 
-We're currently writing unit tests for the socketstream library, one file at a time, and using Jasmine. To run these tests:
+We're trying to add unit tests (using Jasmine) for bug fixes and new features. To run them: 
 
-    npm install jasbin
     cd socketstream
-    jasbin
+    cake spec
 
 ### Known Issues
 
