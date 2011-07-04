@@ -280,13 +280,13 @@ SocketStream runs in __development__ mode by default, outputting all incoming an
 
 Two other 'preset' environments are available: __staging__ and __production__. Both will load SocketStream with sensible defaults for their intended use.
 
-Preset variables can be overwritten and augmented by two optional files if required: an application-wide config file placed in /config/app.json, and an environment-specific file placed in /config/environments/<SS_ENV>.json (e.g. /config/environments/development.json) which will override any values in app.json.
+Preset variables can be overwritten and augmented by two optional files if required: an application-wide config file placed in /config/app.coffee, and an environment-specific file placed in /config/environments/<SS_ENV>.coffee (e.g. /config/environments/development.coffee) which will override any values in app.coffee.
 
 Use the SS_ENV environment variable to start SocketStream in a different environment. E.g:
 
     SS_ENV=staging socketstream start
     
-All default modes are fully configurable using an optional JSON file placed within /config/environments. An unlimited number of new environments may also be added. You can easily tell which environment in running by typing SS.env in the server or client.
+All default modes are fully configurable using an optional coffee file placed within /config/environments. An unlimited number of new environments may also be added. You can easily tell which environment in running by typing SS.env in the server or client.
 
 We will publish a full list of configurable params in the near future, but for now these can be viewed (and hence overridden in the config file), by typing SS.config in the SocketStream console.
 
@@ -294,10 +294,13 @@ Throughout this README you'll see repeated references to config variables which 
 
     SS.config.limiter.enabled = true
 
-In this case, you could change the value of the variable by adding the following JSON in your config file:
+In this case, you could change the value of the variable by adding the following coffee in your config file:
 
-    {"limiter": {"enabled": true}}
-
+``` coffee-script
+module.exports =
+  limiter: 
+    enabled: true
+```
 
 ### Logging
 
@@ -523,14 +526,17 @@ It is enabled by default and can be configured with the following config variabl
 
 The HTTP API also supports Basic Auth, allowing you to access methods which use @session.user_id. If you wish to use this option, we recommend setting SS.config.api.https_only to true to ensure passwords are never transmitted in clear text.
 
-By placing 'exports.authenticate = true' in the file (see above) the server will know to prompt for a username and password before allowing access any of the actions within that file. However, the API will need to know which module to authenticate against. Set the SS.config.api.auth.basic.module_name variable by putting the following JSON in your config file:
-    
-    {
-      "api": { "auth": { "basic": { "module_name": "custom_auth"} } }
-    }
+By placing 'exports.authenticate = true' in the file (see above) the server will know to prompt for a username and password before allowing access any of the actions within that file. However, the API will need to know which module to authenticate against. Set the SS.config.api.auth.basic.module_name variable by putting the following coffee in your config file:
+
+``` coffee-script    
+module.exports = 
+  api: 
+    auth: 
+      basic: 
+        module_name: "custom_auth"
+```
 
 Note: Basic Auth will pass the 'username' and 'password' params to your exports.authenticate function.
-
 
 ### Handling Disconnects
 

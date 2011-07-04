@@ -1,3 +1,9 @@
+NEXT VERSION
+============
+
+* Added support for using configuration files in .coffee | .js format. NOTE - .json files are still supported for backwards compatibility, but new projects will no longer generate configuration files in JSON format.
+* Added a Cakefile for running specs (run cake spec in the socketstream directory)
+
 0.1.2 / 2011-06-30
 ==================
  
